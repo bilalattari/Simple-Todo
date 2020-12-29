@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import firebase from '../config/firebase'
 import { Button, } from '../Button/index'
-
+import './about.css'
 function About() {
     var db = firebase.database()
     const [todo, setTodo] = useState('')
@@ -84,7 +84,7 @@ function About() {
                     allTodos.map((todo, index) => {
                         console.log('todo=====>', todo)
                         return (
-                            <div>
+                            <div className = 'formView'>
                                 <span> {index}= {todo.todo}</span>
                                 <button onClick={() => deleteTodo(todo.todoId, index)}>delete</button>
                             </div>
