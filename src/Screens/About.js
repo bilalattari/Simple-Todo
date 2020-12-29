@@ -40,8 +40,9 @@ function About() {
     const getUserTodosFromFirebase = (userId) => {
         let allArr = []
         db.ref('todo').orderByChild('userId').equalTo(userId).on('child_added', (todos) => {
-            console.log('child added==>', todos.val())
-            allArr.push(todos.val())
+            let todo = todos.val()
+            todo.todoId = todos.key
+            allArr.push(todo)
         })
         setAllTodos([...allArr])
     }
@@ -61,6 +62,13 @@ function About() {
             getUserTodosFromFirebase(user.id)
         }
     }
+
+    const deleteTodo = (todoId, index) => {
+        let arr = allTodos
+        arr.splice(index, 1)
+        setAllTodos([...arr])
+        db.ref('todo/' + todoId).remove();
+    }
     return (
         <div>
             About
@@ -74,9 +82,11 @@ function About() {
             <div>
                 {
                     allTodos.map((todo, index) => {
+                        console.log('todo=====>', todo)
                         return (
                             <div>
-                                <h3> {index}= {todo.todo}</h3>
+                                <span> {index}= {todo.todo}</span>
+                                <button onClick={() => deleteTodo(todo.todoId, index)}>delete</button>
                             </div>
                             //    <div>
                             //      {(edit === index)?
