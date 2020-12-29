@@ -1,0 +1,13 @@
+.common-button{
+ border: none;
+ height: 40px;
+ width: 120px;   
+ cursor: pointer;
+ margin: 12px;
+}
+
+.common-button:hover{
+    background-color: darkgrey;
+    color: white;
+}
+
