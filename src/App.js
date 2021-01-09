@@ -1,12 +1,16 @@
-import React, { useState , useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Router from './config/Router'
 import firebase from 'firebase'
+import { Provider } from 'react-redux'
+import store from './Store'
 
 function App() {
-  
-// Initialize Firebase
+
+  // Initialize Firebase
   return (
-    <Router />
+    <Provider store={store}>
+      <Router />
+    </Provider>
   );
 }
 

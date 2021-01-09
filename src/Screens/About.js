@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+
 import firebase from '../config/firebase'
 import { Button, } from '../Button/index'
 import './about.css'
-function About() {
+
+
+function About(props) {
     var db = firebase.database()
     const [todo, setTodo] = useState('')
     const [allTodos, setAllTodos] = useState([])
@@ -21,13 +26,12 @@ function About() {
     }, [])
 
     const getUserDataFromFirebase = (userId) => {
-        console.log('is function working', userId)
         db.ref('users/' + userId).once('value').then((data) => {
             setUser(data.val())
             getUserTodosFromFirebase(userId)
-
         }).catch((err) => console.log(err))
     }
+
     const getTodosList = (userId) => {
         let allArr = []
         db.ref('todo').orderByChild('userId').equalTo(userId).once('value').then((todos) => {
@@ -82,29 +86,14 @@ function About() {
             <div>
                 {
                     allTodos.map((todo, index) => {
-                        console.log('todo=====>', todo)
+                        // console.log('todo=====>', todo)
                         return (
-                            <div className = 'formView'>
+                            <div className='formView'>
+                                <Link to={'/Chat'}>Chat</Link>
                                 <span> {index}= {todo.todo}</span>
-                                <button onClick={() => deleteTodo(todo.todoId, index)}>delete</button>
+                                <button onClick={() => deleteTodo(todo.todoId, index)}>
+                                    delete</button>
                             </div>
-                            //    <div>
-                            //      {(edit === index)?
-                            //        <>
-                            //        <button onClick={()=>setEdit(-1)}>x</button>
-                            //        <input type="text" value={todo}/>
-                            //        </>
-                            //        :
-                            //        <span> {todo} </span>
-                            //      } 
-
-                            //      {(edit === index)?
-                            //        <Button onClick={()=>update(todo,index)}title={"Save"} />
-                            //        :
-                            //        <Button onClick={() => editTodo(todo, index)} title={"Edit"} />
-                            //      }
-                            //      <Button onClick={() => deleteTodo(index)} title={"Delete"} />
-                            //    </div>
                         )
                     })
                 }
@@ -113,5 +102,13 @@ function About() {
         </div>
     );
 }
+const mapStateToProps = (state /*, ownProps*/) => {
+    console.log('state of redux===>', state)
+    return {
+        counter: state,
+    }
+}
 
-export default About;
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(About)

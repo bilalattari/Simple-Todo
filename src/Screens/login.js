@@ -28,7 +28,6 @@ function Login(props) {
 
 
     const goToRegister = () => props.history.push('/register')
-
     return (
         <div>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={'email'} />
