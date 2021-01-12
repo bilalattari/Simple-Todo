@@ -1,7 +1,8 @@
-import { CHANGE_USER_NAME } from '../constant';
+import { CHANGE_USER_NAME, UPATE_USER_INFO } from '../constant';
 
 const INITIAL_STATE = {
-    userName: 'Bilal'
+    userName: 'Bilal',
+    userInfo: {}
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -10,6 +11,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 userName: action.payload
+            })
+        case UPATE_USER_INFO:
+            return ({
+                ...state,
+                userInfo: action.payload
             })
         default:
             return state;

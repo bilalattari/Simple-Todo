@@ -1,1 +1,2 @@
 export const CHANGE_USER_NAME = 'CHANGE_USER_NAME'
+export const UPATE_USER_INFO = 'UPATE_USER_INFO'

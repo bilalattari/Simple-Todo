@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
+
 import firebase from '../config/firebase'
+import { loginUser } from '../Store/action/auth'
 
 function Login(props) {
 
@@ -7,19 +10,8 @@ function Login(props) {
     const [password, setPassword] = useState('')
 
     const loginUser = () => {
-        if (email != '' && password !== '' ) {
-           
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(async(user) => {
-                    console.log( user.user.uid)
-                    await localStorage.setItem('userId' , user.user.uid)
-
-                })
-                .catch((error) => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    alert(errorMessage)
-                })
+        if (email != '' && password !== '') {
+            props.loginUser(email, password)
         } else {
             alert('Enter proper details')
         }
@@ -38,4 +30,11 @@ function Login(props) {
         </div>)
 }
 
-export default Login;
+
+const mapDispatchToProps = (dispatch) => {
+    return ({
+        loginUser: (email, password) => { dispatch(loginUser(email, password)) }
+    })
+}
+
+export default connect(null, mapDispatchToProps)(Login)

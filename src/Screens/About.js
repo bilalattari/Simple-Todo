@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import firebase from '../config/firebase'
 import { Button, } from '../Button/index'
 import './about.css'
+import auth from '../Store/reducers/auth'
 
 
 function About(props) {
@@ -19,17 +20,19 @@ function About(props) {
     }
 
     useEffect(() => {
-        var userId = localStorage.getItem('userId')
-        getUserDataFromFirebase(userId)
-        getTodosList(userId)
+        if (props.userInfo.id) {
+            getUserDataFromFirebase(props.userInfo.id)
+            getTodosList(props.userInfo.id)
+        }
+
 
     }, [])
 
     const getUserDataFromFirebase = (userId) => {
-        db.ref('users/' + userId).once('value').then((data) => {
-            setUser(data.val())
-            getUserTodosFromFirebase(userId)
-        }).catch((err) => console.log(err))
+        // db.ref('users/' + userId).once('value').then((data) => {
+        //     setUser(data.val())
+        //     getUserTodosFromFirebase(userId)
+        // }).catch((err) => console.log(err))
     }
 
     const getTodosList = (userId) => {
@@ -58,12 +61,12 @@ function About(props) {
         } else {
             let obj = {
                 todo: todo,
-                userId: user.id,
+                userId: props.userInfo.id,
             }
             db.ref('todo').push(obj).then(() => {
                 setTodo('')
             })
-            getUserTodosFromFirebase(user.id)
+            getUserTodosFromFirebase(props.userInfo.id)
         }
     }
 
@@ -73,10 +76,11 @@ function About(props) {
         setAllTodos([...arr])
         db.ref('todo/' + todoId).remove();
     }
+    console.log(props.userInfo, 'props and user info')
     return (
         <div>
             About
-            <h1>{user.name}</h1>
+            <h1>{props.userInfo.name}</h1>
             <div>
                 <input type={'text'} value={todo}
                     placeholder={'Enter Todo'}
@@ -102,13 +106,12 @@ function About(props) {
         </div>
     );
 }
-const mapStateToProps = (state /*, ownProps*/) => {
-    console.log('state of redux===>', state)
-    return {
-        counter: state,
+    const mapStateToProps = (state /*, ownProps*/) => {
+        return {
+            userInfo: state.auth.userInfo,
+        }
     }
-}
 
-const mapDispatchToProps = {}
+    const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(About)
+    export default connect(mapStateToProps, mapDispatchToProps)(About)
